@@ -1,28 +1,26 @@
-#ifndef PLAYER_H
-#define PLAYER_H
+#ifndef GAMEFIELD_H
+#define GAMEFIELD_H
 
 #include <QQuickItem>
 #include <QQuickPaintedItem>
 #include <QColor>
-#include <QKeyEvent>
 
-class Player : public QQuickPaintedItem
+class GameField : public QQuickPaintedItem
 {
     Q_OBJECT
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
 public:
-    explicit Player(QQuickItem *parent = nullptr);
+    explicit GameField(QQuickItem *parent = nullptr);
     void paint(QPainter *painter) Q_DECL_OVERRIDE;
     QColor color() const;
     void setColor(QColor color);
+
 signals:
-    void positionChanged();
     void colorChanged(QColor color);
 public slots:
 private:
-    void keyPressEvent(QKeyEvent *event) override;
-    QColor m_color = QColor("green");
+    QColor m_color = QColor("grey");
 
 };
 
-#endif // PLAYER_H
+#endif // GAMEFIELD_H
