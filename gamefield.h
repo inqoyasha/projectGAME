@@ -6,6 +6,7 @@
 #include <QColor>
 #include <QLinkedList>
 
+
 #include <player.h>
 
 class GameField : public QQuickPaintedItem
@@ -38,9 +39,7 @@ public:
     };
 
 signals:
-
 public slots:
-
 private:
     QLinkedList<eField> m_field;
     qint32 m_columns = 6;

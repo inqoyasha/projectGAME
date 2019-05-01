@@ -7,10 +7,12 @@
 GameField::GameField(QQuickItem *parent)
     :QQuickPaintedItem(parent)
 {
+
 }
 
 void GameField::paint(QPainter *painter)
 {
+
     reset();
     draw_grid(painter);
     draw_objects(painter);
