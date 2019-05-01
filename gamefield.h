@@ -42,7 +42,7 @@ signals:
 public slots:
 
 private:
-    QLinkedList<eField> m_field; //mRoom
+    QLinkedList<eField> m_field;
     qint32 m_columns = 6;
     qint32 m_rows = 6;
     qint32 m_stepsCount;

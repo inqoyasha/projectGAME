@@ -57,7 +57,6 @@ void GameField::draw_objects(QPainter *painter)
 
 void GameField::reset()
 {
-  //  QLinkedList<eField> startField; //tmpRoom
     for (int i=0; i<6; ++i) m_field.append(WALL);
 
     m_field.append(WALL);
