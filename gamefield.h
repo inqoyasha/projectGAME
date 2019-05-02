@@ -6,8 +6,6 @@
 #include <QColor>
 #include <QLinkedList>
 
-#include <player.h>
-
 class GameField : public QQuickPaintedItem
 {
     Q_OBJECT
@@ -19,8 +17,12 @@ public:
     void draw_objects(QPainter *painter);
     void draw_stats(QPainter *painter);
 
-    Q_INVOKABLE void reset(); //sbros
+    Q_INVOKABLE void map(); //karta
     Q_INVOKABLE void stepBack(); // shag nazad
+    Q_INVOKABLE void moveUp();
+    Q_INVOKABLE void moveDown();
+    Q_INVOKABLE void moveLeft();
+    Q_INVOKABLE void moveRight();
     bool isComplete();
 
     qint32 stepsCount(); //sdelannie shagi
@@ -40,14 +42,15 @@ public:
 signals:
 public slots:
 private:
-    QLinkedList<eField> m_field;
+    void moveObject(int offset, int offset2);
+    QVector<eField> m_field;
     qint32 m_columns = 6;
     qint32 m_rows = 6;
     qint32 m_stepsCount;
     qint32 m_boxPosition;
     qint32 m_boxOnPosition;
-    bool m_isComplete = false;
-    QPair<qint32,qint32> m_playerPosition;
+    bool   m_isComplete = false;
+    qint32 m_playerPosition;
 };
 
 #endif // GAMEFIELD_H
