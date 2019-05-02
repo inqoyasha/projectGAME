@@ -11,25 +11,33 @@ Window {
     height: 600
 
 
+
     GameField {
         id: field
         width: root.width * 0.9
         height: root.height * 0.9
 
-        Player {
-            id: player
-            width: parent.width * 0.06
-            height: parent.height * 0.07
-            anchors.centerIn: parent
-        }
-    }
+//        Player {
+//            id: player
+//            width: parent.width * 0.06
+//            height: parent.height * 0.07
+//            color: "yellow"
+//            x: 555
+//            y: 122
+//            //anchors.centerIn: parent
+//            Keys.onLeftPressed:  player.moveLeft()
+//            Keys.onRightPressed: player.moveRight()
+//            Keys.onDownPressed:  player.moveDown()
+//            Keys.onUpPressed:    player.moveUp()
+//            focus: true
+//       }
 
+
+
+    }
     GameButtons {
         id: buttons
         anchors.verticalCenter: field.verticalCenter
         anchors.left: field.right
     }
-
-
-
 }

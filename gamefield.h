@@ -6,7 +6,6 @@
 #include <QColor>
 #include <QLinkedList>
 
-
 #include <player.h>
 
 class GameField : public QQuickPaintedItem

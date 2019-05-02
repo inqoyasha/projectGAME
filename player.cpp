@@ -35,18 +35,73 @@ void Player::setColor(QColor color)
     }
 }
 
-void Player::keyPressEvent(QKeyEvent *event)
+qreal Player::x() const
 {
-    if (event->key() == Qt::Key_W){
-     //   move();
-    }
-    if (event->key() == Qt::Key_S){
-    //    move();
-    }
-    if (event->key() == Qt::Key_A){
-    //    move();
-    }
-    if (event->key() == Qt::Key_D){
-     //   move();
+    return m_x;
+}
+
+qreal Player::y() const
+{
+    return m_y;
+}
+
+qreal Player::z() const
+{
+    return m_z;
+}
+
+void Player::setX(qreal x)
+{
+    if (m_x == x)
+        return;
+    m_x = x;
+    emit xChanged(m_x);
+    update();
+}
+
+void Player::setY(qreal y)
+{
+    if (m_y != y){
+        m_y = y;
+        emit yChanged(m_y);
+        update();
+
     }
 }
+
+void Player::setZ(qreal z)
+{
+    if (m_z != z){
+        m_z = z;
+        emit xChanged(m_z);
+        update();
+
+    }
+}
+
+void Player::moveUp()
+{
+    qDebug() << "moveUp";
+    setColor(Qt::red);
+
+}
+void Player::moveDown()
+{
+    qDebug() << "moveDown";
+    setColor(Qt::yellow);
+   // setX(200);
+  // setY(100);
+}
+void Player::moveLeft()
+{
+    qDebug() << "moveLeft";
+    setColor(Qt::blue);
+}
+void Player::moveRight()
+{
+    qDebug() << "moveRight";
+    setColor(Qt::black);
+}
+
+
+

@@ -35,18 +35,5 @@ Item {
                 }
                     onClicked: {}
             }
-
-            Button {
-                id: but3
-                width: txt3.width + 30
-                height: txt3.height + 30
-                Text {
-                    id: txt3
-                    color: "white"
-                    anchors.centerIn: but3
-                    text: qsTr("Menu")
-                }
-                    onClicked: {}
-            }
     }
 }

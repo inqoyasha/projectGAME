@@ -7,12 +7,10 @@
 GameField::GameField(QQuickItem *parent)
     :QQuickPaintedItem(parent)
 {
-
 }
 
 void GameField::paint(QPainter *painter)
 {
-
     reset();
     draw_grid(painter);
     draw_objects(painter);
@@ -35,23 +33,23 @@ void GameField::draw_objects(QPainter *painter)
         switch (*i) {
             case BOX:
                 qDebug() << "я вызвалсяB";
-                painter->fillRect(width()/m_columns, 0, width()/m_columns, height(),Qt::blue);
+                painter->fillRect((width()/6)*3, (height()/6)*2, (width()/6), (height()/6),Qt::blue);
                 break;
             case WALL:
                 qDebug() << "я вызвалсяW";
-                painter->fillRect(width()/m_columns, 0, width()/m_columns, height(),Qt::black);
+                painter->fillRect(0, 0, width()/6, height()/6,Qt::black);
                 break;
             case PLAYER:
                 qDebug() << "я вызвалсяP";
-                painter->fillRect(width()/m_columns, 0, width()/m_columns, height(),Qt::red);
+                painter->fillRect(width()/6, (height()/6)*2, (width()/6), (height()/6),Qt::red);
                 break;
             case EMPTY:
                 qDebug() << "я вызвалсяE";
-                painter->fillRect(width()/m_columns, 0, width()/m_columns, height(),Qt::white);
+                painter->fillRect(width(), 0, width(), height(),Qt::white);
                 break;
             case BOX_POSITION:
                 qDebug() << "я вызвалсяBP";
-                painter->fillRect(width()/m_columns, 0, width()/m_columns, height(),Qt::yellow);
+                painter->fillRect((width()/6)*3, (height()/6)*3, width()/6, height()/6,Qt::yellow);
                 break;
         }
     }
