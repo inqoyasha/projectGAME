@@ -65,15 +65,21 @@ void GameField::map()
     for (int i=0; i<m_columns; ++i) m_field.append(WALL);
 
     m_field.append(WALL);
+    for (int i=0; i<m_columns-3; ++i) m_field.append(EMPTY);
+    m_field.append(BOX_POSITION);
+    m_field.append(WALL);
+
+    m_field.append(WALL);
     for (int i=0; i<m_columns-2; ++i) m_field.append(EMPTY);
     m_field.append(WALL);
-
 //    for (int i=0; i<m_columns; ++i) m_field.append(EMPTY);
 //    for (int i=0; i<m_columns; ++i) m_field.append(EMPTY);
 
     m_field.append(WALL);
-    m_field.append(PLAYER);
     m_field.append(EMPTY);
+    m_field.append(PLAYER);
+    m_field.append(WALL);
+    m_field.append(BOX);
     m_field.append(BOX);
     m_field.append(EMPTY);
     m_field.append(WALL);
@@ -81,18 +87,29 @@ void GameField::map()
     m_field.append(WALL);
     m_field.append(EMPTY);
     m_field.append(EMPTY);
+    m_field.append(WALL);
     m_field.append(BOX_POSITION);
+    m_field.append(EMPTY);
     m_field.append(EMPTY);
     m_field.append(WALL);
 
 //    for (int i=0; i<m_columns; ++i) m_field.append(EMPTY);
 //    for (int i=0; i<m_columns; ++i) m_field.append(EMPTY);
+    m_field.append(WALL);
+    for (int i=0; i<m_columns-2; ++i) m_field.append(EMPTY);
+    m_field.append(WALL);
 
     m_field.append(WALL);
     for (int i=0; i<m_columns-2; ++i) m_field.append(EMPTY);
     m_field.append(WALL);
 
     for (int i=0; i<m_columns; ++i) m_field.append(WALL);
+   // m_field.resize(m_field.size());
+    qDebug() << m_field.size();
+
+    for (auto i = m_field.begin(); i!=m_field.end(); ++i) {
+        qDebug() << *i;
+    }
 }
 
 void GameField::stepBack()
@@ -104,23 +121,27 @@ void GameField::moveObject(int offset, int offset2)
     int np = m_playerPosition + offset; //next line
     int nnp = m_playerPosition + offset2; //next next line
 
-    qDebug() << "c"<< m_playerPosition;
-    qDebug() << "n"<< np;
-    qDebug() << "nn"<<nnp;
+    qDebug() << "playerpos"<< m_playerPosition;
+    qDebug() << "np"<< np;
+    qDebug() << "nnp"<<nnp;
 
     auto &p = m_field[m_playerPosition];
     auto &op = m_field[np];
     auto &oop = m_field[nnp];
 
+    bool moved = false;
+
     switch(op) {
         case EMPTY: {
             p == PLAYER ? p = EMPTY : p = BOX_POSITION;
-            op = PLAYER;         
+            op = PLAYER;
+            moved = true;
             break;
         }
         case BOX_POSITION:{
             p == PLAYER ? p = EMPTY: p = BOX_POSITION;
             op = PLAYER_ON_POSITION;
+            moved = true;
             break;
         }
         case BOX_ON_POSITION: {
@@ -128,12 +149,14 @@ void GameField::moveObject(int offset, int offset2)
                 p == PLAYER ? p = EMPTY: p = BOX_POSITION;
                 op = PLAYER_ON_POSITION;
                 oop = BOX_ON_POSITION;
+                moved = true;
                 break;
             }
             if (oop == EMPTY) {
                 p == PLAYER ? p = EMPTY: p = BOX_POSITION;
                 op = PLAYER_ON_POSITION;
                 oop = BOX;
+                moved = true;
                 break;
             }
             break;
@@ -143,12 +166,14 @@ void GameField::moveObject(int offset, int offset2)
                     p == PLAYER ? p = EMPTY : p = BOX_POSITION;
                     op = PLAYER;
                     oop = BOX_ON_POSITION;
+                    moved = true;
                     break;
                 }
             if(oop == EMPTY) {
                    p == PLAYER ? p = EMPTY : p = BOX_POSITION;
                    op = PLAYER;
                    oop = BOX;
+                   moved = true;
                    break;
                  }
             break;
@@ -158,6 +183,11 @@ void GameField::moveObject(int offset, int offset2)
         case PLAYER:
         break;
     }
+        if(moved){
+            m_playerPosition = np;
+        }
+
+
 }
 
 void GameField::moveUp()

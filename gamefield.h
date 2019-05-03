@@ -44,8 +44,8 @@ public slots:
 private:
     void moveObject(int offset, int offset2);
     QVector<eField> m_field;
-    qint32 m_columns = 6;
-    qint32 m_rows = 6;
+    qint32 m_columns = 8;
+    qint32 m_rows = 8;
     qint32 m_stepsCount;
     qint32 m_boxPosition;
     qint32 m_boxOnPosition;

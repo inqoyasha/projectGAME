@@ -17,7 +17,8 @@ Window {
             height: root.height * 0.9
             focus: true
 
-            Keys.onLeftPressed:  field.moveLeft()
+            Keys.onLeftPressed: {
+                field.moveLeft() }
             Keys.onRightPressed: field.moveRight()
             Keys.onDownPressed:  field.moveDown()
             Keys.onUpPressed:    field.moveUp()
