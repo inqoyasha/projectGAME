@@ -10,18 +10,24 @@ Window {
     width: 800
     height: 600
 
+    InfoTable {
+        id: infotable
+        anchors.right: root.right
+        anchors.verticalCenter: buttons.verticalCenter
+        anchors.bottom: buttons.top
+    }
+
         GameField {
             id: field
+            focus: true
 
             width: root.width * 0.9
             height: root.height * 0.9
-            focus: true
 
-            Keys.onLeftPressed: {
-                field.moveLeft() }
-            Keys.onRightPressed: field.moveRight()
-            Keys.onDownPressed:  field.moveDown()
-            Keys.onUpPressed:    field.moveUp()
+            Keys.onLeftPressed:   field.moveLeft()
+            Keys.onRightPressed:  field.moveRight()
+            Keys.onDownPressed:   field.moveDown()
+            Keys.onUpPressed:     field.moveUp()
             Keys.onEscapePressed: field.reset()
         }
 
@@ -30,11 +36,18 @@ Window {
 //            width: parent.width * 0.9
 //            height: parent.height * 0.9
 
-//            Keys.onLeftPressed:  player.moveLeft()
-//            Keys.onRightPressed: player.moveRight()
-//            Keys.onDownPressed:  player.moveDown()
-//            Keys.onUpPressed:    player.moveUp()
-//            focus: true
+//            Keys.onLeftPressed:   field.moveLeft()
+//            Keys.onRightPressed:  field.moveRight()
+//            Keys.onDownPressed:   field.moveDown()
+//            Keys.onUpPressed:     field.moveUp()
+//            Keys.onEscapePressed: field.reset()
+
+//            Keys.onPressed: {
+//                if(event.key == Qt.Key_Left)  field.moveLeft()
+//                if(event.key == Qt.Key_Right) field.moveRight()
+//                if(event.key == Qt.Key_Up)    field.moveUp()
+//                if(event.key == Qt.Key_Down)  field.moveDown()
+//            }
 //       }
 
         GameButtons {
@@ -42,4 +55,5 @@ Window {
             anchors.verticalCenter: field.verticalCenter
             anchors.left: field.right
         }
+
 }

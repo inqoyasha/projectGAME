@@ -19,9 +19,11 @@ void GameField::paint(QPainter *painter)
 void GameField::draw_grid(QPainter *painter)
 {
     for (int i=0; i<=m_columns; ++i) {
+        painter->setPen(Qt::black);
         painter->drawLine((width()/m_columns)*i, 0, (width()/m_columns)*i, height());
     }
     for (int i=0; i<=m_rows; ++i) {
+        painter->setPen(Qt::black);
         painter->drawLine(0, (height()/m_rows)*i, width(), (height()/m_rows)*i);
     }
 }
@@ -107,9 +109,9 @@ void GameField::map()
    // m_field.resize(m_field.size());
     qDebug() << m_field.size();
 
-    for (auto i = m_field.begin(); i!=m_field.end(); ++i) {
-        qDebug() << *i;
-    }
+//    for (auto i = m_field.begin(); i!=m_field.end(); ++i) {
+//        qDebug() << *i;
+//    }
 }
 
 void GameField::stepBack()
@@ -118,9 +120,11 @@ void GameField::stepBack()
 
 void GameField::moveObject(int offset, int offset2)
 {
+    int nnp;
     int np = m_playerPosition + offset; //next line
-    int nnp = m_playerPosition + offset2; //next next line
-
+    if (np >= m_columns) {
+    nnp = m_playerPosition + offset2; //next next line
+    } else {nnp = 0; }
     qDebug() << "playerpos"<< m_playerPosition;
     qDebug() << "np"<< np;
     qDebug() << "nnp"<<nnp;

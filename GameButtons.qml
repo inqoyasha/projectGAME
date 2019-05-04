@@ -12,8 +12,8 @@ Item {
             id: colButtons
             Button {
                 id: but1
-                width: txt1.width + 30
-                height: txt1.height + 30
+                width: txt1.width + 20
+                height: txt1.height + 20
                 Text {
                     id: txt1
                     color: "white"
@@ -25,8 +25,8 @@ Item {
 
             Button {
                 id: but2
-                width: txt2.width + 30
-                height: txt2.height + 30
+                width: txt2.width + 20
+                height: txt2.height + 20
                 Text {
                     id: txt2
                     color: "white"
