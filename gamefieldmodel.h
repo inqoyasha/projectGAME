@@ -5,12 +5,17 @@
 #include <QVector>
 #include <QDebug>
 
+#include "gamefield.h"
+
 class GameFieldModel : public QAbstractListModel
 {
     Q_OBJECT
 
-public:
+public:    
     explicit GameFieldModel(QObject *parent = nullptr);
+
+
+    class GameField;
 
     enum {
         DisplayRole,
@@ -33,6 +38,12 @@ public:
         PLAYER_ON_POSITION
     };
 
+    Q_INVOKABLE void moveUp();
+    Q_INVOKABLE void moveDown();
+    Q_INVOKABLE void moveLeft();
+    Q_INVOKABLE void moveRight();
+
+
 
     // Basic functionality:
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -44,11 +55,13 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
 private:
+    void moveObject(int offset, int offset2);
+    GameField *mField;
 //    QVector<QVector<eField>> m_field;
     QVector<eField> m_field;
     qint32 m_columns = 8;
     qint32 m_rows = 8;
-    qint32 m_playerPosition = 27;
+    qint32 m_playerPosition = 26;
 };
 
 #endif // GAMEFIELDMODEL_H
