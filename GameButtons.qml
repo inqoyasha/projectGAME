@@ -1,6 +1,8 @@
 import QtQuick 2.12
-import QtQuick.Window 2.2
 import QtQuick.Controls 2.5
+//import QtQuick.Layouts 1.12
+
+
 
 Item {
     id: item
@@ -9,31 +11,24 @@ Item {
     }
 
     Column {
-            id: colButtons
-            Button {
-                id: but1
-                width: txt1.width + 20
-                height: txt1.height + 20
-                Text {
-                    id: txt1
-                    color: "white"
-                    anchors.centerIn: but1
-                    text: qsTr("Step back")
-                }
-                    onClicked: {}
-            }
-
-            Button {
-                id: but2
-                width: txt2.width + 20
-                height: txt2.height + 20
-                Text {
-                    id: txt2
-                    color: "white"
-                    anchors.centerIn: but2
-                    text: qsTr("Reset")
-                }
-                    onClicked: {}
-            }
-    }
+        id: colButtons
+        Button{
+            width: 100
+            height: 50
+            text: qsTr("New Grid")
+            onClicked: {}
+        }
+        Button{
+            width: 100
+            height: 50
+            text: qsTr("Step back")
+            onClicked: {}
+        }
+        Button{
+            width: 100
+            height: 50
+            text: qsTr("Reset")
+            onClicked: {}
+        }
+}
 }

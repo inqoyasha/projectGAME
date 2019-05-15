@@ -5,17 +5,17 @@
 #include <QVector>
 #include <QDebug>
 
-#include "gamefield.h"
+//#include "gamefield.h"
 
 class GameFieldModel : public QAbstractListModel
 {
     Q_OBJECT
 
-public:    
+public:
     explicit GameFieldModel(QObject *parent = nullptr);
 
 
-    class GameField;
+//    class GameField;
 
     enum {
         DisplayRole,
@@ -43,12 +43,19 @@ public:
     Q_INVOKABLE void moveLeft();
     Q_INVOKABLE void moveRight();
 
+    Q_INVOKABLE bool isComplete();
+
+    Q_INVOKABLE qint32 stepsCount(); //sdelannie shagi
+    Q_INVOKABLE qint32 boxPosition(); //skolko mest pod gruz
+    Q_INVOKABLE qint32 boxOnPosition(); //skolko mest zanyato
+
+
 
 
     // Basic functionality:
-    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
-//    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
+//    int columnCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
 
     // Editable:
 //    Qt::ItemFlags flags(const QModelIndex& index) const override;
@@ -56,12 +63,16 @@ public:
 
 private:
     void moveObject(int offset, int offset2);
-    GameField *mField;
+//    GameField *mField;
 //    QVector<QVector<eField>> m_field;
     QVector<eField> m_field;
     qint32 m_columns = 8;
     qint32 m_rows = 8;
     qint32 m_playerPosition = 26;
+    qint32 m_boxPosition = 2;
+    qint32 m_stepsCount;
+    qint32 m_boxOnPosition;
+    bool   m_isComplete = false;
 };
 
 #endif // GAMEFIELDMODEL_H

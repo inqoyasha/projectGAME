@@ -4,15 +4,15 @@ import QtQuick.Controls 2.5
 
 Item {
     id: textItem
-    width: info1.width + 20
-    height: info1.height + 20
+    Rectangle {
+        id: infoFrame
+        width: 100
+        height: 200
+        color: "lightgray"
         Text {
-            id: info1
-            text: "Кол-во ходов: "
+            anchors.horizontalCenter: infoFrame.horizontalCenter
+            text: "Кол-во ходов: " + stepsCount()
             color: "black"
-            width: 20
-            height: 20
-            anchors.fill: parent
         }
-
+    }
 }

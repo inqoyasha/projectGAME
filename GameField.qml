@@ -15,21 +15,30 @@ GridView {
         id: gameModel
        // list: gameFieldList
     }
+//    Component {
+//        id: name1
+//    Image {
+//            id: name12
+//            source: empty
+//        }}
 
-    delegate: Rectangle {
-                width: 100
-                height: 100
-                border.color: "black"
-                border.width: 1
-                color: empty
-                    Text {
-                        anchors.centerIn: parent
-                        text: value
-                    }
-            }
-
-
-
+//    delegate: switch (value) {
+//                  case 0: name12
+//              }
+        Image {
+            source: empty
+    }
+//        Rectangle {
+//                   width: 100
+//                   height: 100
+//                   border.color: "black"
+//                   border.width: 1
+//                   color: empty
+//                       Text {
+//                           anchors.centerIn: parent
+//                           text: value
+//                       }
+//               }
     Keys.onLeftPressed:   gameModel.moveLeft()
     Keys.onRightPressed:  gameModel.moveRight()
     Keys.onDownPressed:   gameModel.moveDown()

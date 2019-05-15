@@ -2,7 +2,7 @@
 
 GameFieldModel::GameFieldModel(QObject *parent)
     : QAbstractListModel(parent)
-    , mField(nullptr)
+//    , mField(nullptr)
 {
     m_field.append({WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL});
     m_field.append({WALL,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,BOX_POSITION,WALL});
@@ -42,25 +42,25 @@ QVariant GameFieldModel::data(const QModelIndex &index, int role) const
             return value;
         case emptyRole:
              if (value == EMPTY)
-                return QVariant ("white");
+                return QVariant ("pics/empty.png");//QVariant ("white");
         case wallRole:
              if (value == WALL)
-                return QVariant ("orange");
+                return QVariant ("pics/wall.png");//QVariant ("orange");
         case playerRole:
              if (value == PLAYER)
-                return QVariant ("red");
+                return QVariant ("pics/player.png");//QVariant ("red");
         case boxRole:
              if (value == BOX)
-                return QVariant ("blue");
+                return QVariant ("pics/box.png"); //QVariant ("blue");
         case boxPositionRole:
              if (value == BOX_POSITION)
-                return QVariant ("yellow");
+                return QVariant ("pics/boxPosition.png");//QVariant ("yellow");
         case boxOnPositionRole:
              if (value == BOX_ON_POSITION)
-                return QVariant ("lightblue");
+                return QVariant ("pics/boxOnPosition.png");//QVariant ("lightblue");
         case playerOnPositionRole:
              if (value == PLAYER_ON_POSITION)
-                return QVariant ("gray");
+                return QVariant ("pics/playerOnPosition.png");//QVariant ("gray");
         }
     return QVariant();
 }
@@ -93,12 +93,12 @@ void GameFieldModel::moveObject(int offset, int offset2)
 {
     int nnp;
     int np = m_playerPosition + offset; //next line
-    if (np >= m_columns) {
+    if (m_columns <= np && np <= m_field.size()-m_columns) { //np >= m_columns
         nnp = m_playerPosition + offset2; //next next line
         } else {nnp = 0; }
-    qDebug() << "playerpos"<< m_playerPosition;
-    qDebug() << "np"<< np;
-    qDebug() << "nnp"<<nnp;
+    qDebug() << "bilo"<< m_playerPosition;
+    qDebug() << "stalo"<< np;
+    qDebug() << "bydet"<<nnp;
 
     auto &p = m_field[m_playerPosition];
     auto &op = m_field[np];
@@ -132,6 +132,7 @@ void GameFieldModel::moveObject(int offset, int offset2)
                 op = PLAYER_ON_POSITION;
                 oop = BOX;
                 moved = true;
+                --m_boxOnPosition;
                 break;
             }
             break;
@@ -142,6 +143,7 @@ void GameFieldModel::moveObject(int offset, int offset2)
                     op = PLAYER;
                     oop = BOX_ON_POSITION;
                     moved = true;
+                    ++m_boxOnPosition;
                     break;
                 }
             if(oop == EMPTY) {
@@ -160,11 +162,14 @@ void GameFieldModel::moveObject(int offset, int offset2)
     }
         if(moved){
             m_playerPosition = np;
+            ++m_stepsCount;
+            if(m_boxPosition == m_boxOnPosition)
+                m_isComplete = true;
         }
 
-            for (auto i = m_field.begin(); i!=m_field.end(); ++i) {
-                qDebug() << *i;
-            }
+//            for (auto i = m_field.begin(); i!=m_field.end(); ++i) { //vector ne perezapisivaetsya, menyayutsya yachejki mestami
+//                qDebug() << *i;
+//            }
 
 }
 
@@ -210,6 +215,25 @@ void GameFieldModel::moveRight()
         qDebug() << m_field.size();
       //  m_field.resize(64);
     endResetModel();
+}
+bool GameFieldModel::isComplete()
+{
+    return m_isComplete;
+}
+
+qint32 GameFieldModel::stepsCount()
+{
+    return m_stepsCount;
+}
+
+qint32 GameFieldModel::boxPosition()
+{
+    return m_boxPosition;
+}
+
+qint32 GameFieldModel::boxOnPosition()
+{
+    return m_boxOnPosition;
 }
 
 
