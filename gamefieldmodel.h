@@ -5,27 +5,19 @@
 #include <QVector>
 #include <QDebug>
 
-//#include "gamefield.h"
-
 class GameFieldModel : public QAbstractListModel
 {
     Q_OBJECT
+    Q_PROPERTY(qint32 step READ step NOTIFY stepChanged)
+    Q_PROPERTY(qint32 boxes READ boxes NOTIFY boxesChanged)
+    Q_PROPERTY(qint32 boxesOnPosition READ boxesOnPosition NOTIFY boxesOnPositionChanged)
+    Q_PROPERTY(bool   isComplete READ isComplete NOTIFY isCompleteChanged)
 
 public:
     explicit GameFieldModel(QObject *parent = nullptr);
 
-
-//    class GameField;
-
     enum {
-        DisplayRole,
-        emptyRole = Qt::UserRole + 1,
-        boxRole,
-        wallRole,
-        playerRole,
-        boxPositionRole,
-        boxOnPositionRole,
-        playerOnPositionRole
+        iconSourceRole = Qt::UserRole + 1,
     };
 
     enum eField {
@@ -42,36 +34,41 @@ public:
     Q_INVOKABLE void moveDown();
     Q_INVOKABLE void moveLeft();
     Q_INVOKABLE void moveRight();
+    Q_INVOKABLE void reset();
 
-    Q_INVOKABLE bool isComplete();
+    Q_INVOKABLE void nextLevel();
 
-    Q_INVOKABLE qint32 stepsCount(); //sdelannie shagi
-    Q_INVOKABLE qint32 boxPosition(); //skolko mest pod gruz
-    Q_INVOKABLE qint32 boxOnPosition(); //skolko mest zanyato
+    Q_INVOKABLE QVector<eField> stepBack();
 
+    bool isComplete();
 
-
+    qint32 step(); //sdelannie shagi
+    qint32 boxes(); //skolko mest pod gruz = yashikov
+    qint32 boxesOnPosition(); //skolko mest zanyato
 
     // Basic functionality:
     int rowCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
-//    int columnCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
 
     // Editable:
-//    Qt::ItemFlags flags(const QModelIndex& index) const override;
     QHash<int, QByteArray> roleNames() const override;
 
+signals:
+    void stepChanged(qint32 m_stepsCount);
+    void boxesChanged(qint32 m_boxPosition);
+    void boxesOnPositionChanged(qint32 m_boxOnPosition);
+    void isCompleteChanged(bool m_isComplete);
 private:
     void moveObject(int offset, int offset2);
-//    GameField *mField;
-//    QVector<QVector<eField>> m_field;
+    QVector<QVector<eField>> m_fieldMemory;
+    const QModelIndex parent;
     QVector<eField> m_field;
     qint32 m_columns = 8;
     qint32 m_rows = 8;
-    qint32 m_playerPosition = 26;
+    qint32 m_playerPosition = 38;
     qint32 m_boxPosition = 2;
-    qint32 m_stepsCount;
-    qint32 m_boxOnPosition;
+    qint32 m_stepsCount = 0;
+    qint32 m_boxOnPosition = 0;
     bool   m_isComplete = false;
 };
 
