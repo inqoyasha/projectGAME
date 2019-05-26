@@ -10,7 +10,7 @@ Window {
     visible: true
     width: 1000
     height: 900
-    title: qsTr("Hello World")
+    title: qsTr("Gruz4ik")
     color: "lightgray"
     GameField {
         id: field

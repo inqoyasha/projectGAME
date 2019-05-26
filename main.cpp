@@ -15,7 +15,6 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
 //    GameFieldModel *model = new GameFieldModel(&engine);
-
 //    engine.rootContext()->setContextProperty("GameFieldModel", model);
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
