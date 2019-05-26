@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/">
+        <file>GameField.qml</file>
+        <file>main.qml</file>
+        <file>qtquickcontrols2.conf</file>
+        <file>pics/box.png</file>
+        <file>pics/boxOnPosition.png</file>
+        <file>pics/boxPosition.png</file>
+        <file>pics/empty.png</file>
+        <file>pics/player.png</file>
+        <file>pics/playerOnPosition.png</file>
+        <file>pics/wall.png</file>
+    </qresource>
+    <qresource prefix="/main"/>
+    <qresource prefix="/123"/>
+</RCC>

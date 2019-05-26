@@ -3,7 +3,8 @@
 GameFieldModel::GameFieldModel(QObject *parent)
     : QAbstractListModel(parent)
 {
-    reset();
+    firstLevel();
+    m_fieldMemory.append(m_field);
 }
 
 int GameFieldModel::rowCount(const QModelIndex &parent) const
@@ -134,17 +135,18 @@ void GameFieldModel::moveObject(int offsetPlayerIcon, int offsetIconAfterPlayerI
         break;
     }
 
-
+    m_fieldMemory.append(m_field);
+    m_playerPositionMemory.append(m_playerPosition);
         if(moved){
             beginResetModel();
             endResetModel();
+//            m_playerPositionMemory.append(m_playerPosition);
             m_playerPosition = nextPosition;
             ++m_stepsCount;
             emit stepChanged(m_stepsCount);
             if(m_boxPosition == m_boxOnPosition)
                 m_isComplete = true;
                 emit isCompleteChanged(m_isComplete);
-            m_fieldMemory.append(m_field);
         }
 
     qDebug() << "shagi"<< step();
@@ -188,9 +190,11 @@ void GameFieldModel::moveRight()
         qDebug() << "";
 }
 
-void GameFieldModel::reset()
+void GameFieldModel::firstLevel()
 {
     beginResetModel();
+    m_fieldMemory.clear();
+    m_playerPositionMemory.clear();
     m_field.clear();
     m_playerPosition = 26;
     m_boxPosition = 2;
@@ -215,6 +219,8 @@ void GameFieldModel::nextLevel()
 {
     beginResetModel();
     m_field.clear();
+    m_playerPositionMemory.clear();
+    m_fieldMemory.clear();
     m_playerPosition = 38;
     m_boxPosition = 4;
     m_stepsCount = 0;
@@ -223,26 +229,53 @@ void GameFieldModel::nextLevel()
     emit boxesOnPositionChanged(m_boxOnPosition);
     m_isComplete = false;
     emit isCompleteChanged(m_isComplete);
-    m_field.append({WALL,WALL, WALL, WALL, WALL,        WALL, WALL,        WALL});
-    m_field.append({WALL,BOX_POSITION,EMPTY,EMPTY,EMPTY,       EMPTY,BOX_POSITION,WALL});
-    m_field.append({WALL,EMPTY,WALL,EMPTY,EMPTY,       WALL,EMPTY,         WALL});
-    m_field.append({WALL,EMPTY,BOX,EMPTY, EMPTY,       BOX,EMPTY,       WALL});
-    m_field.append({WALL,EMPTY,BOX,EMPTY, EMPTY,BOX,  PLAYER,      WALL});
-    m_field.append({WALL,EMPTY,WALL,EMPTY,EMPTY,       WALL,EMPTY,       WALL});
-    m_field.append({WALL,BOX_POSITION,EMPTY,EMPTY,EMPTY,       EMPTY,BOX_POSITION,       WALL});
-    m_field.append({WALL,WALL, WALL, WALL, WALL,        WALL, WALL,        WALL});
+    m_field.append({WALL,WALL, WALL, WALL, WALL,WALL, WALL,WALL});
+    m_field.append({WALL,BOX_POSITION,EMPTY,EMPTY,EMPTY,EMPTY,BOX_POSITION,WALL});
+    m_field.append({WALL,EMPTY,WALL,EMPTY,EMPTY,WALL,EMPTY,WALL});
+    m_field.append({WALL,EMPTY,BOX,EMPTY,EMPTY,BOX,EMPTY,WALL});
+    m_field.append({WALL,EMPTY,BOX,EMPTY,EMPTY,BOX,PLAYER,WALL});
+    m_field.append({WALL,EMPTY,WALL,EMPTY,EMPTY,WALL,EMPTY, WALL});
+    m_field.append({WALL,BOX_POSITION,EMPTY,EMPTY,EMPTY,EMPTY,BOX_POSITION,WALL});
+    m_field.append({WALL,WALL, WALL, WALL, WALL,WALL,WALL,WALL});
     endResetModel();
 }
 
-QVector<GameFieldModel::eField> GameFieldModel::stepBack()
+void GameFieldModel::stepBack()
 {
-    for (auto i = m_fieldMemory.begin(); i!=m_fieldMemory.end(); ++i) {
+    int z = 0;
+    ++countCallStepBack;
+
+    auto size = m_fieldMemory.size();
+
+    m_field.clear();
+    for (auto t: m_fieldMemory.at(size-countCallStepBack-1)) {
+        m_field.push_back(t);
+    }
+    beginResetModel();
+
+    qDebug() << "size "<< m_fieldMemory.size();
+    qDebug() << "count "<< countCallStepBack;
+
+    for (auto i = m_playerPositionMemory.begin(); i!=m_playerPositionMemory.end(); ++i) { //vector ne perezapisivaetsya, menyayutsya yachejki mestami
         qDebug() << *i;
     }
-    qDebug() << "size" << m_fieldMemory.size();
-    m_field.clear();
-    //m_field.swap(m_fieldMemory.at(1));
-    return m_field;
+
+//    if (!m_playerPositionMemory.endsWith(m_playerPositionMemory.front())) {
+    m_playerPosition = m_playerPositionMemory.back();
+//        } else {
+//            m_playerPosition = m_playerPositionMemory.front();
+//        }
+
+//    for (auto i = m_playerPositionMemory.begin(); i!=m_playerPositionMemory.end(); ++i) { //vector ne perezapisivaetsya, menyayutsya yachejki mestami
+//        qDebug() << *i;
+//    }
+
+
+//    m_playerPosition = m_playerPositionMemory.at(m_playerPositionMemory.size()-1);
+//    m_playerPositionMemory.pop_back();
+
+    endResetModel();
+    //return m_field;
 }
 
 bool GameFieldModel::isComplete()

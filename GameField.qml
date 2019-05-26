@@ -9,15 +9,12 @@ GridView {
     id: gridView
     property var lvlCount: 1
     property var maxLvls: 2
-//        property bool end: false
     implicitWidth: 800
     implicitHeight: 800
 
     focus: true
     model: GameFieldModel {
         id: gameModel
-//        property var myObject
-       // list: gameFieldList
         onStepChanged:  txt1.text = "Steps: "+ step
         onBoxesOnPositionChanged: txt2.text = "Boxes: "+ boxesOnPosition +"/"+ boxes
         onIsCompleteChanged: {
@@ -50,10 +47,6 @@ GridView {
             event.accepted = true;
         }
     }
-//    Keys.onLeftPressed:   gameModel.moveLeft()
-//    Keys.onRightPressed:  gameModel.moveRight()
-//    Keys.onDownPressed:   gameModel.moveDown()
-//    Keys.onUpPressed:     gameModel.moveUp()
 
     Item {
         id: infoTextItem
@@ -96,7 +89,6 @@ GridView {
         id: textWin
         Rectangle {
             id: rect1
-//            property var count: 0
             radius: 20
             width: 200
             height: 150
@@ -151,7 +143,6 @@ GridView {
                 focusPolicy: Qt.NoFocus
                 onClicked: {
                     console.log("Step back")
-                    but1.focus = false
                     gameModel.stepBack()
                 }
             }
@@ -163,8 +154,7 @@ GridView {
                 focusPolicy: Qt.NoFocus
                 onClicked: {
                     console.log("Reset");
-                    but2.focus = false
-                    gameModel.reset()
+                    if (gridView.lvlCount < maxLvls) {gameModel.firstLevel()} else {gameModel.nextLevel()}
                     txt1.text = "Steps: "+ step
                     txt2.text = "Boxes: "+ boxesOnPosition +"/"+ boxes
                 }
@@ -177,9 +167,18 @@ GridView {
                 focusPolicy: Qt.NoFocus
                 onClicked: {
                     console.log("Options");
-                    but2.focus = false
                 }
-
+            }
+                Button {
+                    id: but4
+                    width: 100
+                    height: 50
+                    text: qsTr("Quit")
+                    focusPolicy: Qt.NoFocus
+                    onClicked: {
+                        console.log("quit game")
+                        Qt.quit()
+                    }
             }
         }
     }

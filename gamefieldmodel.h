@@ -4,6 +4,7 @@
 #include <QAbstractListModel>
 #include <QVector>
 #include <QDebug>
+#include <QList>
 
 class GameFieldModel : public QAbstractListModel
 {
@@ -34,11 +35,11 @@ public:
     Q_INVOKABLE void moveDown();
     Q_INVOKABLE void moveLeft();
     Q_INVOKABLE void moveRight();
-    Q_INVOKABLE void reset();
+    Q_INVOKABLE void firstLevel();
 
     Q_INVOKABLE void nextLevel();
 
-    Q_INVOKABLE QVector<eField> stepBack();
+    Q_INVOKABLE void stepBack();
 
     bool isComplete();
 
@@ -60,12 +61,16 @@ signals:
     void isCompleteChanged(bool m_isComplete);
 private:
     void moveObject(int offset, int offset2);
+
     QVector<QVector<eField>> m_fieldMemory;
+    QList<int> m_playerPositionMemory;
+    int countCallStepBack = 0;
+
     const QModelIndex parent;
     QVector<eField> m_field;
     qint32 m_columns = 8;
     qint32 m_rows = 8;
-    qint32 m_playerPosition = 38;
+    qint32 m_playerPosition = 26;
     qint32 m_boxPosition = 2;
     qint32 m_stepsCount = 0;
     qint32 m_boxOnPosition = 0;
