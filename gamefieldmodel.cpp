@@ -4,7 +4,7 @@ GameFieldModel::GameFieldModel(QObject *parent)
     : QAbstractListModel(parent)
 {
     firstLevel();
-    m_fieldMemory.append(m_field);
+//    m_fieldMemory.append(m_field);
 }
 
 int GameFieldModel::rowCount(const QModelIndex &parent) const
@@ -25,30 +25,25 @@ QVariant GameFieldModel::data(const QModelIndex &index, int role) const
     switch (value){
         case EMPTY:
             return QVariant ("pics/empty.png");
-            break;
         case WALL:
             return QVariant ("pics/wall.png");
-            break;
         case PLAYER:
             return QVariant ("pics/player.png");
-            break;
         case BOX:
             return QVariant ("pics/box.png");
-            break;
         case BOX_POSITION:
             return QVariant ("pics/boxPosition.png");
-            break;
         case BOX_ON_POSITION:
             return QVariant ("pics/boxOnPosition.png");
-            break;
         case PLAYER_ON_POSITION:
             return QVariant ("pics/playerOnPosition.png");
-            break;
     }
 
     switch(role){
         case iconSourceRole:
             return value;
+        default:
+            return QVariant();
     }
 }
 
@@ -140,7 +135,6 @@ void GameFieldModel::moveObject(int offsetPlayerIcon, int offsetIconAfterPlayerI
         if(moved){
             beginResetModel();
             endResetModel();
-//            m_playerPositionMemory.append(m_playerPosition);
             m_playerPosition = nextPosition;
             ++m_stepsCount;
             emit stepChanged(m_stepsCount);
@@ -155,7 +149,14 @@ void GameFieldModel::moveObject(int offsetPlayerIcon, int offsetIconAfterPlayerI
 //            for (auto i = m_field.begin(); i!=m_field.end(); ++i) { //vector ne perezapisivaetsya, menyayutsya yachejki mestami
 //                qDebug() << *i;
 //            }
-
+    qDebug() << "size play1" << m_playerPositionMemory.size();
+    qDebug() << "size field1"<< m_fieldMemory.size();
+//    for (auto i = m_fieldMemory.begin(); i!=m_fieldMemory.end(); ++i) { //vector ne perezapisivaetsya, menyayutsya yachejki mestami
+//        qDebug() << *i;
+//    }
+//    for (auto i = m_playerPositionMemory.begin(); i!=m_playerPositionMemory.end(); ++i) { //vector ne perezapisivaetsya, menyayutsya yachejki mestami
+//        qDebug() << *i;
+//    }
 }
 
 void GameFieldModel::moveUp()
@@ -213,14 +214,15 @@ void GameFieldModel::firstLevel()
     m_field.append({WALL,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,WALL});
     m_field.append({WALL,WALL,WALL,WALL,WALL,WALL,WALL,WALL});
     endResetModel();
+    m_fieldMemory.append(m_field);
 }
 
 void GameFieldModel::nextLevel()
 {
     beginResetModel();
-    m_field.clear();
-    m_playerPositionMemory.clear();
     m_fieldMemory.clear();
+    m_playerPositionMemory.clear();
+    m_field.clear();
     m_playerPosition = 38;
     m_boxPosition = 4;
     m_stepsCount = 0;
@@ -238,43 +240,44 @@ void GameFieldModel::nextLevel()
     m_field.append({WALL,BOX_POSITION,EMPTY,EMPTY,EMPTY,EMPTY,BOX_POSITION,WALL});
     m_field.append({WALL,WALL, WALL, WALL, WALL,WALL,WALL,WALL});
     endResetModel();
+    m_fieldMemory.append(m_field);
 }
 
 void GameFieldModel::stepBack()
 {
-    int z = 0;
-    ++countCallStepBack;
-
-    auto size = m_fieldMemory.size();
-
-    m_field.clear();
-    for (auto t: m_fieldMemory.at(size-countCallStepBack-1)) {
-        m_field.push_back(t);
-    }
     beginResetModel();
 
-    qDebug() << "size "<< m_fieldMemory.size();
-    qDebug() << "count "<< countCallStepBack;
+    ++countCallStepBack;
 
-    for (auto i = m_playerPositionMemory.begin(); i!=m_playerPositionMemory.end(); ++i) { //vector ne perezapisivaetsya, menyayutsya yachejki mestami
-        qDebug() << *i;
+//    auto sizeField = m_fieldMemory.size();
+    auto sizePlayerPos = m_playerPositionMemory.size();
+
+    m_field.clear();
+    for (auto t: m_fieldMemory.at(sizePlayerPos-1)) {
+        m_field.push_back(t);
     }
+    endResetModel();
 
-//    if (!m_playerPositionMemory.endsWith(m_playerPositionMemory.front())) {
-    m_playerPosition = m_playerPositionMemory.back();
-//        } else {
-//            m_playerPosition = m_playerPositionMemory.front();
-//        }
+    qDebug() << "size play2" << m_playerPositionMemory.size();
+    m_fieldMemory.removeAt(sizePlayerPos);
+
+    qDebug() << "size field2"<< m_fieldMemory.size();
+//    qDebug() << "count "<< countCallStepBack;
+
+//    for (auto i = m_field.begin(); i!=m_field.end(); ++i) { //vector ne perezapisivaetsya, menyayutsya yachejki mestami
+//        qDebug() << *i;
+//    }
 
 //    for (auto i = m_playerPositionMemory.begin(); i!=m_playerPositionMemory.end(); ++i) { //vector ne perezapisivaetsya, menyayutsya yachejki mestami
 //        qDebug() << *i;
 //    }
 
+    qDebug() << "position ="<< m_playerPositionMemory.back();
 
-//    m_playerPosition = m_playerPositionMemory.at(m_playerPositionMemory.size()-1);
-//    m_playerPositionMemory.pop_back();
+    m_playerPosition = m_playerPositionMemory.back();
+    m_playerPositionMemory.pop_back();
 
-    endResetModel();
+
     //return m_field;
 }
 
