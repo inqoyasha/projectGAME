@@ -4,7 +4,6 @@ GameFieldModel::GameFieldModel(QObject *parent)
     : QAbstractListModel(parent)
 {
     firstLevel();
-//    m_fieldMemory.append(m_field);
 }
 
 int GameFieldModel::rowCount(const QModelIndex &parent) const
