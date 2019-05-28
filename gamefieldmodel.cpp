@@ -4,6 +4,7 @@ GameFieldModel::GameFieldModel(QObject *parent)
     : QAbstractListModel(parent)
 {
     firstLevel();
+//    m_fieldMemory.append(m_field);
 }
 
 int GameFieldModel::rowCount(const QModelIndex &parent) const
@@ -246,21 +247,24 @@ void GameFieldModel::stepBack()
 {
     beginResetModel();
 
-    ++countCallStepBack;
-
-//    auto sizeField = m_fieldMemory.size();
     auto sizePlayerPos = m_playerPositionMemory.size();
 
     m_field.clear();
-    for (auto t: m_fieldMemory.at(sizePlayerPos-1)) {
-        m_field.push_back(t);
+    if (sizePlayerPos-1 != -1) {
+        for (auto t: m_fieldMemory.at(sizePlayerPos-1)) {
+            m_field.push_back(t);
+        }
+    } else {
+        for (auto t: m_fieldMemory.at(0)) {
+            m_field.push_back(t);
+        }
     }
     endResetModel();
 
-    qDebug() << "size play2" << m_playerPositionMemory.size();
-    m_fieldMemory.removeAt(sizePlayerPos);
+//    qDebug() << "size play2" << m_playerPositionMemory.size();
+    if (m_fieldMemory.size() != 1) m_fieldMemory.removeAt(sizePlayerPos);
 
-    qDebug() << "size field2"<< m_fieldMemory.size();
+//    qDebug() << "size field2"<< m_fieldMemory.size();
 //    qDebug() << "count "<< countCallStepBack;
 
 //    for (auto i = m_field.begin(); i!=m_field.end(); ++i) { //vector ne perezapisivaetsya, menyayutsya yachejki mestami
@@ -271,10 +275,10 @@ void GameFieldModel::stepBack()
 //        qDebug() << *i;
 //    }
 
-    qDebug() << "position ="<< m_playerPositionMemory.back();
+//    qDebug() << "position ="<< m_playerPositionMemory.back();
 
-    m_playerPosition = m_playerPositionMemory.back();
-    m_playerPositionMemory.pop_back();
+    if (!m_playerPositionMemory.isEmpty()) m_playerPosition = m_playerPositionMemory.back();
+    if (!m_playerPositionMemory.isEmpty()) m_playerPositionMemory.pop_back();
 
 
     //return m_field;

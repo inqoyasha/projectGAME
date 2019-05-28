@@ -60,13 +60,11 @@ signals:
     void boxesOnPositionChanged(qint32 m_boxOnPosition);
     void isCompleteChanged(bool m_isComplete);
 private:
-    void moveObject(int offset, int offset2);
+    void moveObject(int offsetPlayerIcon, int offsetIconAfterPlayerIcon);
 
     QVector<QVector<eField>> m_fieldMemory;
     QList<int> m_playerPositionMemory;
-    int countCallStepBack = 0;
 
-    const QModelIndex parent;
     QVector<eField> m_field;
     qint32 m_columns = 8;
     qint32 m_rows = 8;
