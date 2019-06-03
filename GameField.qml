@@ -9,14 +9,15 @@ GridView {
     id: gridView
     property var lvlCount: 1
     property var maxLvls: 2
+    property var startAnimation: 0
     implicitWidth: 800
     implicitHeight: 800
 
     focus: true
     model: GameFieldModel {
         id: gameModel
-        onStepChanged:  txt1.text = "Steps: "+ step
-        onBoxesOnPositionChanged: txt2.text = "Boxes: "+ boxesOnPosition +"/"+ boxes
+        onStepChanged:  txt1.text = "Steps: " + step
+        onBoxesOnPositionChanged: txt2.text = "Boxes: " + boxesOnPosition + "/" + boxes
         onIsCompleteChanged: {
             gridView.focus = (gameModel.isComplete === false) ? true : false
         }
@@ -24,10 +25,10 @@ GridView {
     delegate: Image {
                 source: iconSource
               }
-//    populate: Transition {
-//            PropertyAnimation { property: "x"; duration: 2000; easing.type: Easing.OutQuart}
-//            PropertyAnimation { property: "y"; duration: 2000; easing.type: Easing.OutQuart}
-//        }
+    populate: Transition {
+            PropertyAnimation {
+                property: if (gridView.startAnimation === 0) {"y"} else {""} duration: 1000; easing.type: Easing.InQuad}
+        }
 
     Keys.onPressed: {
         if (event.key === Qt.Key_Left) {
@@ -50,6 +51,7 @@ GridView {
             gameModel.moveDown();
             event.accepted = true;
         }
+        gridView.startAnimation++;
     }
 
         Rectangle {
@@ -121,6 +123,7 @@ GridView {
                     onClicked: {
                         console.log("rect1 Restart")
                         gameModel.nextLevel()
+                        gridView.startAnimation=0;
                     }
                     onReleased: {
                         if (gridView.lvlCount < maxLvls) ++gridView.lvlCount
