@@ -94,6 +94,18 @@ GridView {
             width: 200
             height: 150
             color: "lightgreen"
+            opacity: 0
+
+                NumberAnimation {
+                    target: rect1
+                    properties: "opacity"
+                    running: true
+                    from: 0
+                    to: 1
+                    duration: 1500
+                    easing.type: Easing.InOutQuad
+                }
+
             Text {
                 id: text1
                 anchors.centerIn: parent
@@ -104,7 +116,7 @@ GridView {
             RowLayout {
                 anchors.centerIn: rect1
                 anchors.verticalCenterOffset: 30
-                Button {         
+                Button {
                     text: (gridView.lvlCount === 1) ? qsTr("Next") : qsTr("Restart")
                     onClicked: {
                         console.log("rect1 Restart")
@@ -127,46 +139,46 @@ GridView {
         }
     }
 
-        Column {
-            anchors.verticalCenter: gridView.verticalCenter
-            anchors.left: gridView.right
-            id: colButtons
-            Button {
-                id: but1
-                width: 100
-                height: 50
-                text: qsTr("Step back")
-                focusPolicy: Qt.NoFocus
-                onClicked: if (gameModel.isComplete === false) {
-                    console.log("Step back")
-                    gameModel.stepBack()
-                }
-            }
-            Button {
-                id: but2
-                width: 100
-                height: 50
-                text: qsTr("Reset")
-                focusPolicy: Qt.NoFocus
-                onClicked: if (gameModel.isComplete === false) {
-                    console.log("Reset");
-                    if (gridView.lvlCount < maxLvls) {gameModel.firstLevel()} else {gameModel.nextLevel()}
-                    txt1.text = "Steps: "+ step
-                    txt2.text = "Boxes: "+ boxesOnPosition +"/"+ boxes
-                }
-            }
-                Button {
-                    id: but3
-                    width: 100
-                    height: 50
-                    text: qsTr("Quit")
-                    focusPolicy: Qt.NoFocus
-                    onClicked: if (gameModel.isComplete === false) {
-                        console.log("quit game")
-                        Qt.quit()
-                    }
+    Column {
+        anchors.verticalCenter: gridView.verticalCenter
+        anchors.left: gridView.right
+        id: colButtons
+        Button {
+            id: but1
+            width: 100
+            height: 50
+            text: qsTr("Step back")
+            focusPolicy: Qt.NoFocus
+            onClicked: if (gameModel.isComplete === false) {
+                console.log("Step back")
+                gameModel.stepBack()
             }
         }
+        Button {
+            id: but2
+            width: 100
+            height: 50
+            text: qsTr("Reset")
+            focusPolicy: Qt.NoFocus
+            onClicked: if (gameModel.isComplete === false) {
+                console.log("Reset");
+                if (gridView.lvlCount < maxLvls) {gameModel.firstLevel()} else {gameModel.nextLevel()}
+                txt1.text = "Steps: "+ step
+                txt2.text = "Boxes: "+ boxesOnPosition +"/"+ boxes
+            }
+        }
+            Button {
+                id: but3
+                width: 100
+                height: 50
+                text: qsTr("Quit")
+                focusPolicy: Qt.NoFocus
+                onClicked: if (gameModel.isComplete === false) {
+                    console.log("quit game")
+                    Qt.quit()
+                }
+        }
+    }
 }
 
 
