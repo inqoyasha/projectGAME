@@ -13,10 +13,10 @@ GridView {
     implicitWidth: 800
     implicitHeight: 800
 
-    focus: true
+    focus: false
     model: GameFieldModel {
         id: gameModel
-        onStepChanged:  txt1.text = "Steps: " + step
+        onStepChanged:  {txt1.text = "Steps: " + step}
         onBoxesOnPositionChanged: txt2.text = "Boxes: " + boxesOnPosition + "/" + boxes
         onIsCompleteChanged: {
             gridView.focus = (gameModel.isComplete === false) ? true : false
@@ -27,31 +27,37 @@ GridView {
               }
     populate: Transition {
             PropertyAnimation {
-                property: if (gridView.startAnimation === 0) {"y"} else {""} duration: 1000; easing.type: Easing.InQuad}
+                property: if (gridView.startAnimation === 0) {"y"} else {""} duration:1000; easing.type: Easing.InQuad}
         }
+
+    Timer {
+        id:timerAnimation
+        interval: 1000; running: true; repeat: false
+        onTriggered: gridView.startAnimation++;
+    }
 
     Keys.onPressed: {
         if (event.key === Qt.Key_Left) {
             console.log("move left");
-            gameModel.moveLeft();
+            if (gridView.startAnimation > 0) gameModel.moveLeft()
             event.accepted = true;
         }
         if (event.key === Qt.Key_Right) {
             console.log("move right");
-            gameModel.moveRight();
+            if (gridView.startAnimation > 0) gameModel.moveRight();
             event.accepted = true;
         }
         if (event.key === Qt.Key_Up) {
             console.log("move up");
-            gameModel.moveUp();
+            if (gridView.startAnimation > 0) gameModel.moveUp();
             event.accepted = true;
         }
         if (event.key === Qt.Key_Down) {
             console.log("move down");
-            gameModel.moveDown();
+            if (gridView.startAnimation > 0) gameModel.moveDown();
             event.accepted = true;
         }
-        gridView.startAnimation++;
+//        gridView.startAnimation++;
     }
 
         Rectangle {
@@ -123,7 +129,8 @@ GridView {
                     onClicked: {
                         console.log("rect1 Restart")
                         gameModel.nextLevel()
-                        gridView.startAnimation=0;
+                        gridView.startAnimation=0
+                        timerAnimation.start()
                     }
                     onReleased: {
                         if (gridView.lvlCount < maxLvls) ++gridView.lvlCount
