@@ -24,6 +24,10 @@ GridView {
     delegate: Image {
                 source: iconSource
               }
+//    populate: Transition {
+//            PropertyAnimation { property: "x"; duration: 2000; easing.type: Easing.OutQuart}
+//            PropertyAnimation { property: "y"; duration: 2000; easing.type: Easing.OutQuart}
+//        }
 
     Keys.onPressed: {
         if (event.key === Qt.Key_Left) {
@@ -48,13 +52,10 @@ GridView {
         }
     }
 
-    Item {
-        id: infoTextItem
-        x: 800
-        y: 200
-
         Rectangle {
             id: infoFrame
+            x: 800
+            y: 200
             width: 100
             height: 200
             color: "lightgray"
@@ -79,7 +80,7 @@ GridView {
                 y:90
             }
         }
-    }
+
     Loader {
         id: loader
         anchors.centerIn: parent
@@ -125,15 +126,10 @@ GridView {
             }
         }
     }
-    Item {
-        id: item
-        anchors.verticalCenter: gridView.verticalCenter
-        anchors.left: gridView.right
-        ButtonGroup {
-            id: butGroup
-            buttons: colButtons.children
-        }
+
         Column {
+            anchors.verticalCenter: gridView.verticalCenter
+            anchors.left: gridView.right
             id: colButtons
             Button {
                 id: but1
@@ -141,7 +137,7 @@ GridView {
                 height: 50
                 text: qsTr("Step back")
                 focusPolicy: Qt.NoFocus
-                onClicked: {
+                onClicked: if (gameModel.isComplete === false) {
                     console.log("Step back")
                     gameModel.stepBack()
                 }
@@ -152,36 +148,25 @@ GridView {
                 height: 50
                 text: qsTr("Reset")
                 focusPolicy: Qt.NoFocus
-                onClicked: {
+                onClicked: if (gameModel.isComplete === false) {
                     console.log("Reset");
                     if (gridView.lvlCount < maxLvls) {gameModel.firstLevel()} else {gameModel.nextLevel()}
                     txt1.text = "Steps: "+ step
                     txt2.text = "Boxes: "+ boxesOnPosition +"/"+ boxes
                 }
             }
-            Button {
-                id: but3
-                width: 100
-                height: 50
-                text: qsTr("Options")
-                focusPolicy: Qt.NoFocus
-                onClicked: {
-                    console.log("Options");
-                }
-            }
                 Button {
-                    id: but4
+                    id: but3
                     width: 100
                     height: 50
                     text: qsTr("Quit")
                     focusPolicy: Qt.NoFocus
-                    onClicked: {
+                    onClicked: if (gameModel.isComplete === false) {
                         console.log("quit game")
                         Qt.quit()
                     }
             }
         }
-    }
 }
 
 

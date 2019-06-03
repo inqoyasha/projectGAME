@@ -60,10 +60,11 @@ signals:
     void boxesOnPositionChanged(qint32 m_boxOnPosition);
     void isCompleteChanged(bool m_isComplete);
 private:
-    void moveObject(int offsetPlayerIcon, int offsetIconAfterPlayerIcon);
+    void moveObject(qint32 offsetPlayerIcon, qint32 offsetIconAfterPlayerIcon);
 
     QVector<QVector<eField>> m_fieldMemory;
-    QList<int> m_playerPositionMemory;
+    QList<qint32> m_playerPositionMemory;
+    QList<qint32> m_boxOnPositionMemory;
 
     QVector<eField> m_field;
     qint32 m_columns = 8;

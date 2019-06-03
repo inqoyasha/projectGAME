@@ -4,7 +4,6 @@ GameFieldModel::GameFieldModel(QObject *parent)
     : QAbstractListModel(parent)
 {
     firstLevel();
-//    m_fieldMemory.append(m_field);
 }
 
 int GameFieldModel::rowCount(const QModelIndex &parent) const
@@ -54,7 +53,7 @@ QHash<int, QByteArray> GameFieldModel::roleNames() const
     return roles;
 }
 
-void GameFieldModel::moveObject(int offsetPlayerIcon, int offsetIconAfterPlayerIcon)
+void GameFieldModel::moveObject(qint32 offsetPlayerIcon, qint32 offsetIconAfterPlayerIcon)
 {
     int nextNextPosition;
     int nextPosition = m_playerPosition + offsetPlayerIcon; //next line
@@ -132,6 +131,7 @@ void GameFieldModel::moveObject(int offsetPlayerIcon, int offsetIconAfterPlayerI
 
     m_fieldMemory.append(m_field);
     m_playerPositionMemory.append(m_playerPosition);
+    m_boxOnPositionMemory.append(m_boxOnPosition);
         if(moved){
             beginResetModel();
             endResetModel();
@@ -196,6 +196,7 @@ void GameFieldModel::firstLevel()
     beginResetModel();
     m_fieldMemory.clear();
     m_playerPositionMemory.clear();
+    m_boxOnPositionMemory.clear();
     m_field.clear();
     m_playerPosition = 26;
     m_boxPosition = 2;
@@ -222,6 +223,7 @@ void GameFieldModel::nextLevel()
     beginResetModel();
     m_fieldMemory.clear();
     m_playerPositionMemory.clear();
+    m_boxOnPositionMemory.clear();
     m_field.clear();
     m_playerPosition = 38;
     m_boxPosition = 4;
@@ -261,27 +263,42 @@ void GameFieldModel::stepBack()
     }
     endResetModel();
 
-//    qDebug() << "size play2" << m_playerPositionMemory.size();
-    if (m_fieldMemory.size() != 1) m_fieldMemory.removeAt(sizePlayerPos);
+//    for (auto i = m_boxOnPosition1.begin(); i!=m_boxOnPosition1.end(); ++i) { //vector ne perezapisivaetsya, menyayutsya yachejki mestami
+//            qDebug () << *i << "s" << m_boxOnPosition1.at(m_boxOnPosition1.size()-1);
+//    }
+//    for (auto i = m_field.begin(); i!=m_field.end(); ++i) { //vector ne perezapisivaetsya, menyayutsya yachejki mestami
+//        if (*i != BOX_ON_POSITION) {
+//            m_boxOnPosition--;
+//            qDebug () << "-1" << m_boxOnPosition;
+//        }
+//    }
 
+    if (m_fieldMemory.size() != 1) {
+        m_fieldMemory.removeAt(sizePlayerPos);
+        if (m_stepsCount != 0) m_stepsCount--;
+        emit stepChanged(m_stepsCount);
+//        if (m_boxOnPosition != 0) { // nuzhen massiv
+//            m_boxOnPosition--;
+//            emit boxesOnPositionChanged(m_boxOnPosition);
+//        }
+    }
+//    qDebug() << "size play2" << m_playerPositionMemory.size();
 //    qDebug() << "size field2"<< m_fieldMemory.size();
 //    qDebug() << "count "<< countCallStepBack;
-
 //    for (auto i = m_field.begin(); i!=m_field.end(); ++i) { //vector ne perezapisivaetsya, menyayutsya yachejki mestami
 //        qDebug() << *i;
 //    }
-
 //    for (auto i = m_playerPositionMemory.begin(); i!=m_playerPositionMemory.end(); ++i) { //vector ne perezapisivaetsya, menyayutsya yachejki mestami
 //        qDebug() << *i;
 //    }
-
 //    qDebug() << "position ="<< m_playerPositionMemory.back();
+
+    if (!m_boxOnPositionMemory.isEmpty()) m_boxOnPositionMemory.pop_back();
+    if (!m_boxOnPositionMemory.isEmpty()) m_boxOnPosition = m_boxOnPositionMemory.back();
+    emit boxesOnPositionChanged(m_boxOnPosition);
 
     if (!m_playerPositionMemory.isEmpty()) m_playerPosition = m_playerPositionMemory.back();
     if (!m_playerPositionMemory.isEmpty()) m_playerPositionMemory.pop_back();
-
-
-    //return m_field;
 }
 
 bool GameFieldModel::isComplete()
