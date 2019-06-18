@@ -1,5 +1,8 @@
 #include "gamefieldmodel.h"
 
+#include "windows.h"
+#include <thread>
+
 GameFieldModel::GameFieldModel(QObject *parent)
     : QAbstractListModel(parent)
 {
@@ -33,9 +36,9 @@ QVariant GameFieldModel::data(const QModelIndex &index, int role) const
         case BOX_POSITION:
             return QVariant ("pics/boxPosition.png");
         case BOX_ON_POSITION:
-            return QVariant ("pics/boxOnPosition.png");
+            return QVariant ("pics/box.png");    //return QVariant ("pics/boxOnPosition.png");
         case PLAYER_ON_POSITION:
-            return QVariant ("pics/playerOnPosition.png");
+            return QVariant ("pics/player.png"); //return QVariant ("pics/playerOnPosition.png");
     }
 
     switch(role){
@@ -73,13 +76,90 @@ void GameFieldModel::moveObject(qint32 offsetPlayerIcon, qint32 offsetIconAfterP
 
     switch(beforePlayerPosition) {
         case EMPTY: {
+        beginResetModel();
+        endResetModel();
+
+        if (m_playerPosition == 36 || m_playerPosition == 14 || m_playerPosition == 9 || m_playerPosition == 49 || m_playerPosition == 54) {
+            if ((offsetPlayerIcon == -8) && (offsetIconAfterPlayerIcon == -16)) { // вверх
+                beginMoveRows(parent, m_playerPosition, m_playerPosition,parent, nextPosition+1);
+                endMoveRows();
+                beginMoveRows(parent, nextPosition, nextPosition,parent, m_playerPosition+1);
+                endMoveRows();
+            } else if ((offsetPlayerIcon == 8) && (offsetIconAfterPlayerIcon == 16)){ // вниз
+                    beginMoveRows(parent, m_playerPosition, m_playerPosition,parent, nextPosition);
+                    endMoveRows();
+                    beginMoveRows(parent, nextPosition, nextPosition,parent, m_playerPosition);
+                    endMoveRows();
+                } else if ((offsetPlayerIcon == -1) && (offsetIconAfterPlayerIcon == -2)) { // влево
+                            beginMoveRows(parent, m_playerPosition, m_playerPosition, parent, nextPosition);
+                            endMoveRows();
+                        } else if ((offsetPlayerIcon == 1) && (offsetIconAfterPlayerIcon == 2)) {//вправо
+                                beginMoveRows(parent, m_playerPosition, m_playerPosition, parent, nextPosition+1);
+                                endMoveRows();
+                        }
+
+            beginRemoveRows(parent,m_playerPosition,m_playerPosition);
+            endRemoveRows();
+            beginInsertRows(parent,m_playerPosition,m_playerPosition);
+            endInsertRows();
+
+        } else if ((offsetPlayerIcon == -8) && (offsetIconAfterPlayerIcon == -16)) { // вверх
+            beginMoveRows(parent, m_playerPosition, m_playerPosition,parent, nextPosition+1);
+            endMoveRows();
+            beginMoveRows(parent, nextPosition, nextPosition,parent, m_playerPosition+1);
+            endMoveRows();} else if ((offsetPlayerIcon == 8) && (offsetIconAfterPlayerIcon == 16)){ // вниз
+                beginMoveRows(parent, m_playerPosition, m_playerPosition,parent, nextPosition);
+                endMoveRows();
+                beginMoveRows(parent, nextPosition, nextPosition,parent, m_playerPosition);
+                endMoveRows();} else if ((offsetPlayerIcon == -1) && (offsetIconAfterPlayerIcon == -2)) { // влево
+                    beginMoveRows(parent, m_playerPosition, m_playerPosition, parent, nextPosition);
+                    endMoveRows(); } else if ((offsetPlayerIcon == 1) && (offsetIconAfterPlayerIcon == 2)) {//вправо
+                        beginMoveRows(parent, m_playerPosition, m_playerPosition, parent, nextPosition+1);
+                        endMoveRows(); }
+
             playerPosition == PLAYER ? playerPosition = EMPTY : playerPosition = BOX_POSITION;
             beforePlayerPosition = PLAYER;
             moved = true;
-
             break;
         }
         case BOX_POSITION:{
+
+        if ((offsetPlayerIcon == -8) && (offsetIconAfterPlayerIcon == -16)) { // вверх
+            beginMoveRows(parent, m_playerPosition, m_playerPosition,parent, nextPosition+1);
+            endMoveRows();
+            beginMoveRows(parent, nextPosition, nextPosition,parent, m_playerPosition+1);
+            endMoveRows();
+            beginRemoveRows(parent,m_playerPosition,m_playerPosition);
+            endRemoveRows();
+            beginInsertRows(parent,m_playerPosition,m_playerPosition);
+            endInsertRows();
+
+
+        } else if ((offsetPlayerIcon == 8) && (offsetIconAfterPlayerIcon == 16)){ // вниз
+                beginMoveRows(parent, m_playerPosition, m_playerPosition,parent, nextPosition);
+                endMoveRows();
+                beginMoveRows(parent, nextPosition, nextPosition,parent, m_playerPosition);
+                endMoveRows();
+                beginRemoveRows(parent,m_playerPosition,m_playerPosition);
+                endRemoveRows();
+                beginInsertRows(parent,m_playerPosition,m_playerPosition);
+                endInsertRows();
+            } else if ((offsetPlayerIcon == -1) && (offsetIconAfterPlayerIcon == -2)) { // влево
+                        beginMoveRows(parent, m_playerPosition, m_playerPosition, parent, nextPosition);
+                        endMoveRows();
+                        beginRemoveRows(parent,m_playerPosition,m_playerPosition);
+                        endRemoveRows();
+                        beginInsertRows(parent,m_playerPosition,m_playerPosition);
+                        endInsertRows();
+                    } else if ((offsetPlayerIcon == 1) && (offsetIconAfterPlayerIcon == 2)) {//вправо
+                            beginMoveRows(parent, m_playerPosition, m_playerPosition, parent, nextPosition+1);
+                            endMoveRows();
+                            beginRemoveRows(parent,m_playerPosition,m_playerPosition);
+                            endRemoveRows();
+                            beginInsertRows(parent,m_playerPosition,m_playerPosition);
+                            endInsertRows();
+                    }
+
             playerPosition == PLAYER ? playerPosition = EMPTY: playerPosition = BOX_POSITION;
             beforePlayerPosition = PLAYER_ON_POSITION;
             moved = true;
@@ -91,6 +171,52 @@ void GameFieldModel::moveObject(qint32 offsetPlayerIcon, qint32 offsetIconAfterP
                 beforePlayerPosition = PLAYER_ON_POSITION;
                 afterPlayerPosition = BOX_ON_POSITION;
                 moved = true;
+                if ((offsetPlayerIcon == -8) && (offsetIconAfterPlayerIcon == -16)) { // вверх
+                    beginMoveRows(parent, nextPosition, nextPosition,parent, nextNextPosition+1);
+                    endMoveRows();
+                    beginMoveRows(parent, m_playerPosition, m_playerPosition,parent, nextPosition+1);
+                    endMoveRows();
+                    beginMoveRows(parent, nextNextPosition, nextNextPosition,parent, nextPosition+1);
+                    endMoveRows();
+                    beginMoveRows(parent, nextPosition, nextPosition,parent, m_playerPosition+1);
+                    endMoveRows();
+                    beginRemoveRows(parent,m_playerPosition,m_playerPosition);
+                    endRemoveRows();
+                    beginInsertRows(parent,m_playerPosition,m_playerPosition);
+                    endInsertRows();
+
+                     } else if ((offsetPlayerIcon == 8) && (offsetIconAfterPlayerIcon == 16)){ // вниз
+                        beginMoveRows(parent, nextPosition, nextPosition,parent, nextNextPosition);
+                        endMoveRows();
+                        beginMoveRows(parent, m_playerPosition, m_playerPosition,parent, nextPosition);
+                        endMoveRows();
+                        beginMoveRows(parent, nextNextPosition, nextNextPosition,parent, nextPosition);
+                        endMoveRows();
+                        beginMoveRows(parent, nextPosition, nextPosition,parent, m_playerPosition);
+                        endMoveRows();
+                        beginRemoveRows(parent,m_playerPosition,m_playerPosition);
+                        endRemoveRows();
+                        beginInsertRows(parent,m_playerPosition,m_playerPosition);
+                        endInsertRows();
+                         } else if ((offsetPlayerIcon == -1) && (offsetIconAfterPlayerIcon == -2)) { // влево
+                                beginMoveRows(parent, nextPosition, nextPosition,parent, nextNextPosition);
+                                endMoveRows();
+                                beginMoveRows(parent, m_playerPosition, m_playerPosition,parent, nextPosition);
+                                endMoveRows();
+                                beginRemoveRows(parent,m_playerPosition,m_playerPosition);
+                                endRemoveRows();
+                                beginInsertRows(parent,m_playerPosition,m_playerPosition);
+                                endInsertRows();
+                             } else if ((offsetPlayerIcon == 1) && (offsetIconAfterPlayerIcon == 2)) {//вправо
+                                    beginMoveRows(parent, nextPosition, nextPosition,parent, nextNextPosition+1);
+                                    endMoveRows();
+                                    beginMoveRows(parent, m_playerPosition, m_playerPosition,parent, nextPosition+1);
+                                    endMoveRows();
+                                    beginRemoveRows(parent,m_playerPosition,m_playerPosition);
+                                    endRemoveRows();
+                                    beginInsertRows(parent,m_playerPosition,m_playerPosition);
+                                    endInsertRows();
+                            }
                 break;
             }
             if (afterPlayerPosition == EMPTY) {
@@ -98,6 +224,52 @@ void GameFieldModel::moveObject(qint32 offsetPlayerIcon, qint32 offsetIconAfterP
                 beforePlayerPosition = PLAYER_ON_POSITION;
                 afterPlayerPosition = BOX;
                 moved = true;
+                if ((offsetPlayerIcon == -8) && (offsetIconAfterPlayerIcon == -16)) { // вверх
+                    beginMoveRows(parent, nextPosition, nextPosition,parent, nextNextPosition+1);
+                    endMoveRows();
+                    beginMoveRows(parent, m_playerPosition, m_playerPosition,parent, nextPosition+1);
+                    endMoveRows();
+                    beginMoveRows(parent, nextNextPosition, nextNextPosition,parent, nextPosition+1);
+                    endMoveRows();
+                    beginMoveRows(parent, nextPosition, nextPosition,parent, m_playerPosition+1);
+                    endMoveRows();
+                    beginRemoveRows(parent,m_playerPosition,m_playerPosition);
+                    endRemoveRows();
+                    beginInsertRows(parent,m_playerPosition,m_playerPosition);
+                    endInsertRows();
+
+                     } else if ((offsetPlayerIcon == 8) && (offsetIconAfterPlayerIcon == 16)){ // вниз
+                        beginMoveRows(parent, nextPosition, nextPosition,parent, nextNextPosition);
+                        endMoveRows();
+                        beginMoveRows(parent, m_playerPosition, m_playerPosition,parent, nextPosition);
+                        endMoveRows();
+                        beginMoveRows(parent, nextNextPosition, nextNextPosition,parent, nextPosition);
+                        endMoveRows();
+                        beginMoveRows(parent, nextPosition, nextPosition,parent, m_playerPosition);
+                        endMoveRows();
+                        beginRemoveRows(parent,m_playerPosition,m_playerPosition);
+                        endRemoveRows();
+                        beginInsertRows(parent,m_playerPosition,m_playerPosition);
+                        endInsertRows();
+                         } else if ((offsetPlayerIcon == -1) && (offsetIconAfterPlayerIcon == -2)) { // влево
+                                beginMoveRows(parent, nextPosition, nextPosition,parent, nextNextPosition);
+                                endMoveRows();
+                                beginMoveRows(parent, m_playerPosition, m_playerPosition,parent, nextPosition);
+                                endMoveRows();
+                                beginRemoveRows(parent,m_playerPosition,m_playerPosition);
+                                endRemoveRows();
+                                beginInsertRows(parent,m_playerPosition,m_playerPosition);
+                                endInsertRows();
+                             } else if ((offsetPlayerIcon == 1) && (offsetIconAfterPlayerIcon == 2)) {//вправо
+                                    beginMoveRows(parent, nextPosition, nextPosition,parent, nextNextPosition+1);
+                                    endMoveRows();
+                                    beginMoveRows(parent, m_playerPosition, m_playerPosition,parent, nextPosition+1);
+                                    endMoveRows();
+                                    beginRemoveRows(parent,m_playerPosition,m_playerPosition);
+                                    endRemoveRows();
+                                    beginInsertRows(parent,m_playerPosition,m_playerPosition);
+                                    endInsertRows();
+                            }
                 --m_boxOnPosition;
                 emit boxesOnPositionChanged(m_boxOnPosition);
                 break;
@@ -110,6 +282,52 @@ void GameFieldModel::moveObject(qint32 offsetPlayerIcon, qint32 offsetIconAfterP
                     beforePlayerPosition = PLAYER;
                     afterPlayerPosition = BOX_ON_POSITION;
                     moved = true;
+                    if ((offsetPlayerIcon == -8) && (offsetIconAfterPlayerIcon == -16)) { // вверх
+                        beginMoveRows(parent, nextPosition, nextPosition,parent, nextNextPosition+1);
+                        endMoveRows();
+                        beginMoveRows(parent, m_playerPosition, m_playerPosition,parent, nextPosition+1);
+                        endMoveRows();
+                        beginMoveRows(parent, nextNextPosition, nextNextPosition,parent, nextPosition+1);
+                        endMoveRows();
+                        beginMoveRows(parent, nextPosition, nextPosition,parent, m_playerPosition+1);
+                        endMoveRows();
+                        beginRemoveRows(parent,m_playerPosition,m_playerPosition);
+                        endRemoveRows();
+                        beginInsertRows(parent,m_playerPosition,m_playerPosition);
+                        endInsertRows();
+
+                         } else if ((offsetPlayerIcon == 8) && (offsetIconAfterPlayerIcon == 16)){ // вниз
+                            beginMoveRows(parent, nextPosition, nextPosition,parent, nextNextPosition);
+                            endMoveRows();
+                            beginMoveRows(parent, m_playerPosition, m_playerPosition,parent, nextPosition);
+                            endMoveRows();
+                            beginMoveRows(parent, nextNextPosition, nextNextPosition,parent, nextPosition);
+                            endMoveRows();
+                            beginMoveRows(parent, nextPosition, nextPosition,parent, m_playerPosition);
+                            endMoveRows();
+                            beginRemoveRows(parent,m_playerPosition,m_playerPosition);
+                            endRemoveRows();
+                            beginInsertRows(parent,m_playerPosition,m_playerPosition);
+                            endInsertRows();
+                             } else if ((offsetPlayerIcon == -1) && (offsetIconAfterPlayerIcon == -2)) { // влево
+                                    beginMoveRows(parent, nextPosition, nextPosition,parent, nextNextPosition);
+                                    endMoveRows();
+                                    beginMoveRows(parent, m_playerPosition, m_playerPosition,parent, nextPosition);
+                                    endMoveRows();
+                                    beginRemoveRows(parent,m_playerPosition,m_playerPosition);
+                                    endRemoveRows();
+                                    beginInsertRows(parent,m_playerPosition,m_playerPosition);
+                                    endInsertRows();
+                                 } else if ((offsetPlayerIcon == 1) && (offsetIconAfterPlayerIcon == 2)) {//вправо
+                                        beginMoveRows(parent, nextPosition, nextPosition,parent, nextNextPosition+1);
+                                        endMoveRows();
+                                        beginMoveRows(parent, m_playerPosition, m_playerPosition,parent, nextPosition+1);
+                                        endMoveRows();
+                                        beginRemoveRows(parent,m_playerPosition,m_playerPosition);
+                                        endRemoveRows();
+                                        beginInsertRows(parent,m_playerPosition,m_playerPosition);
+                                        endInsertRows();
+                                }
                     ++m_boxOnPosition;
                     emit boxesOnPositionChanged(m_boxOnPosition);
                     break;
@@ -119,6 +337,41 @@ void GameFieldModel::moveObject(qint32 offsetPlayerIcon, qint32 offsetIconAfterP
                    beforePlayerPosition = PLAYER;
                    afterPlayerPosition = BOX;
                    moved = true;
+                   if ((offsetPlayerIcon == -8) && (offsetIconAfterPlayerIcon == -16)) { // вверх
+                       beginMoveRows(parent, nextPosition, nextPosition,parent, nextNextPosition+1);
+                       endMoveRows();
+                       beginMoveRows(parent, m_playerPosition, m_playerPosition,parent, nextPosition+1);
+                       endMoveRows();
+                       beginMoveRows(parent, nextNextPosition, nextNextPosition,parent, nextPosition+1);
+                       endMoveRows();
+                       beginMoveRows(parent, nextPosition, nextPosition,parent, m_playerPosition+1);
+                       endMoveRows();
+                        } else if ((offsetPlayerIcon == 8) && (offsetIconAfterPlayerIcon == 16)){ // вниз
+                           beginMoveRows(parent, nextPosition, nextPosition,parent, nextNextPosition);
+                           endMoveRows();
+                           beginMoveRows(parent, m_playerPosition, m_playerPosition,parent, nextPosition);
+                           endMoveRows();
+                           beginMoveRows(parent, nextNextPosition, nextNextPosition,parent, nextPosition);
+                           endMoveRows();
+                           beginMoveRows(parent, nextPosition, nextPosition,parent, m_playerPosition);
+                           endMoveRows();
+                            } else if ((offsetPlayerIcon == -1) && (offsetIconAfterPlayerIcon == -2)) { // влево
+                                   beginMoveRows(parent, nextPosition, nextPosition,parent, nextNextPosition);
+                                   endMoveRows();
+                                   beginMoveRows(parent, m_playerPosition, m_playerPosition,parent, nextPosition);
+                                   endMoveRows();
+                                } else if ((offsetPlayerIcon == 1) && (offsetIconAfterPlayerIcon == 2)) {//вправо
+                                       beginMoveRows(parent, nextPosition, nextPosition,parent, nextNextPosition+1);
+                                       endMoveRows();
+                                       beginMoveRows(parent, m_playerPosition, m_playerPosition,parent, nextPosition+1);
+                                       endMoveRows();
+                               }
+
+                   beginRemoveRows(parent,m_playerPosition,m_playerPosition);
+                   endRemoveRows();
+                   beginInsertRows(parent,m_playerPosition,m_playerPosition);
+                   endInsertRows();
+
                    break;
                  }
             break;
@@ -133,8 +386,6 @@ void GameFieldModel::moveObject(qint32 offsetPlayerIcon, qint32 offsetIconAfterP
     m_playerPositionMemory.append(m_playerPosition);
     m_boxOnPositionMemory.append(m_boxOnPosition);
         if(moved){
-            beginResetModel();
-            endResetModel();
             m_playerPosition = nextPosition;
             ++m_stepsCount;
             emit stepChanged(m_stepsCount);
@@ -248,7 +499,6 @@ void GameFieldModel::nextLevel()
 void GameFieldModel::stepBack()
 {
     beginResetModel();
-
     auto sizePlayerPos = m_playerPositionMemory.size();
 
     m_field.clear();

@@ -11,7 +11,7 @@ Window {
     width: 1000
     height: 900
     title: qsTr("Gruz4ik")
-    color: "lightgray"
+//    color: "lightgray"
     GameField {
         id: field
         focus: true

@@ -9,14 +9,14 @@ GridView {
     id: gridView
     property var lvlCount: 1
     property var maxLvls: 2
-    property var startAnimation: 0
+//    property var startAnimation: 0
     implicitWidth: 800
     implicitHeight: 800
-
     focus: false
+
     model: GameFieldModel {
         id: gameModel
-        onStepChanged:  {txt1.text = "Steps: " + step}
+        onStepChanged:  txt1.text = "Steps: " + step
         onBoxesOnPositionChanged: txt2.text = "Boxes: " + boxesOnPosition + "/" + boxes
         onIsCompleteChanged: {
             gridView.focus = (gameModel.isComplete === false) ? true : false
@@ -25,36 +25,47 @@ GridView {
     delegate: Image {
                 source: iconSource
               }
-    populate: Transition {
-            PropertyAnimation {
-                property: if (gridView.startAnimation === 0) {"y"} else {""} duration:1000; easing.type: Easing.InQuad}
-        }
+//    populate: Transition {
+//            PropertyAnimation {
+//                property: if (gridView.startAnimation === 0) {"y"} else {""} duration:1000; easing.type: Easing.InQuad}
+//        }
 
-    Timer {
-        id:timerAnimation
-        interval: 1000; running: true; repeat: false
-        onTriggered: gridView.startAnimation++;
+    move: Transition {
+            PropertyAnimation { property: "x"; duration: 1000; easing.type: Easing.OutQuart}
+            PropertyAnimation { property: "y"; duration: 1000; easing.type: Easing.OutQuart}
+        }
+    add: Transition {
+         PropertyAnimation {property: "opacity"; from: 0; to: 1; duration: 1500; easing.type: Easing.OutQuart}
     }
+    remove: Transition {
+            PropertyAnimation {property: "opacity"; from: 1; to: 0; duration: 1500; easing.type: Easing.OutQuart}
+       }
+
+//    Timer {
+//        id:timerAnimation
+//        interval: 1000; running: true; repeat: false
+//        onTriggered: gridView.startAnimation++;
+//    }
 
     Keys.onPressed: {
         if (event.key === Qt.Key_Left) {
             console.log("move left");
-            if (gridView.startAnimation > 0) gameModel.moveLeft()
+            /*if (gridView.startAnimation > 0)*/ gameModel.moveLeft()
             event.accepted = true;
         }
         if (event.key === Qt.Key_Right) {
             console.log("move right");
-            if (gridView.startAnimation > 0) gameModel.moveRight();
+            /*if (gridView.startAnimation > 0)*/ gameModel.moveRight();
             event.accepted = true;
         }
         if (event.key === Qt.Key_Up) {
             console.log("move up");
-            if (gridView.startAnimation > 0) gameModel.moveUp();
+            /*if (gridView.startAnimation > 0)*/ gameModel.moveUp();
             event.accepted = true;
         }
         if (event.key === Qt.Key_Down) {
             console.log("move down");
-            if (gridView.startAnimation > 0) gameModel.moveDown();
+            /*if (gridView.startAnimation > 0)*/ gameModel.moveDown();
             event.accepted = true;
         }
 //        gridView.startAnimation++;
@@ -66,7 +77,7 @@ GridView {
             y: 200
             width: 100
             height: 200
-            color: "lightgray"
+//            color: "lightgray"
             Text {
                 id: txt0
                 anchors.horizontalCenter: infoFrame.horizontalCenter
@@ -129,12 +140,12 @@ GridView {
                     onClicked: {
                         console.log("rect1 Restart")
                         gameModel.nextLevel()
-                        gridView.startAnimation=0
-                        timerAnimation.start()
+//                        gridView.startAnimation=0
+//                        timerAnimation.start()
                     }
                     onReleased: {
                         if (gridView.lvlCount < maxLvls) ++gridView.lvlCount
-                        txt1.text = "Steps: "+ step
+//                        txt1.text = "Steps: "+ step
                         txt2.text = "Boxes: "+ boxesOnPosition +"/"+ boxes
                     }
                 }
@@ -173,8 +184,8 @@ GridView {
             onClicked: if (gameModel.isComplete === false) {
                 console.log("Reset");
                 if (gridView.lvlCount < maxLvls) {gameModel.firstLevel()} else {gameModel.nextLevel()}
-                txt1.text = "Steps: "+ step
-                txt2.text = "Boxes: "+ boxesOnPosition +"/"+ boxes
+//                txt1.text = "Steps: "+ step
+//                txt2.text = "Boxes: "+ boxesOnPosition +"/"+ boxes
             }
         }
             Button {

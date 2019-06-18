@@ -62,6 +62,8 @@ signals:
 private:
     void moveObject(qint32 offsetPlayerIcon, qint32 offsetIconAfterPlayerIcon);
 
+    const QModelIndex parent;
+
     QVector<QVector<eField>> m_fieldMemory;
     QList<qint32> m_playerPositionMemory;
     QList<qint32> m_boxOnPositionMemory;
