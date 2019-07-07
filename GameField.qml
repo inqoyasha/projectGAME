@@ -7,7 +7,6 @@ import GameField 1.0
 
 GridView {
     id: gridView
-    property var lvlCount: 1
     property var maxLvls: 2
 //    property var startAnimation: 0
     implicitWidth: 800
@@ -25,14 +24,10 @@ GridView {
     delegate: Image {
                 source: iconSource
               }
-//    populate: Transition {
-//            PropertyAnimation {
-//                property: if (gridView.startAnimation === 0) {"y"} else {""} duration:1000; easing.type: Easing.InQuad}
-//        }
 
     move: Transition {
-            PropertyAnimation { property: "x"; duration: 1000; easing.type: Easing.OutQuart}
-            PropertyAnimation { property: "y"; duration: 1000; easing.type: Easing.OutQuart}
+            PropertyAnimation { property: "x"; duration: 800; easing.type: Easing.OutQuart}
+            PropertyAnimation { property: "y"; duration: 800; easing.type: Easing.OutQuart}
         }
     add: Transition {
          PropertyAnimation {property: "opacity"; from: 0; to: 1; duration: 1500; easing.type: Easing.OutQuart}
@@ -43,7 +38,7 @@ GridView {
 
 //    Timer {
 //        id:timerAnimation
-//        interval: 1000; running: true; repeat: false
+//        interval: 2000; running: true; repeat: false
 //        onTriggered: gridView.startAnimation++;
 //    }
 
@@ -81,7 +76,7 @@ GridView {
             Text {
                 id: txt0
                 anchors.horizontalCenter: infoFrame.horizontalCenter
-                text: "LVL: "+ gridView.lvlCount
+                text: "LVL: "+ gameModel.lvlCount
                 color: "black"
             }
             Text {
@@ -136,18 +131,16 @@ GridView {
                 anchors.centerIn: rect1
                 anchors.verticalCenterOffset: 30
                 Button {
-                    text: (gridView.lvlCount === 1) ? qsTr("Next") : qsTr("Restart")
+                    text: (gameModel.lvlCount === 1) ? qsTr("Next") : qsTr("Restart")
                     onClicked: {
                         console.log("rect1 Restart")
                         gameModel.nextLevel()
-//                        gridView.startAnimation=0
-//                        timerAnimation.start()
                     }
-                    onReleased: {
-                        if (gridView.lvlCount < maxLvls) ++gridView.lvlCount
-//                        txt1.text = "Steps: "+ step
-                        txt2.text = "Boxes: "+ boxesOnPosition +"/"+ boxes
-                    }
+//                    onReleased: {
+//                        if (gameModel.lvlCount < maxLvls) ++gameModel.lvlCount
+////                        txt1.text = "Steps: "+ step
+//                        txt2.text = "Boxes: "+ boxesOnPosition +"/"+ boxes
+//                    }
                 }
                 Button {
                     text: qsTr("Quit")
@@ -162,6 +155,7 @@ GridView {
 
     Column {
         anchors.verticalCenter: gridView.verticalCenter
+        anchors.verticalCenterOffset: 50
         anchors.left: gridView.right
         id: colButtons
         Button {
@@ -183,13 +177,33 @@ GridView {
             focusPolicy: Qt.NoFocus
             onClicked: if (gameModel.isComplete === false) {
                 console.log("Reset");
-                if (gridView.lvlCount < maxLvls) {gameModel.firstLevel()} else {gameModel.nextLevel()}
-//                txt1.text = "Steps: "+ step
-//                txt2.text = "Boxes: "+ boxesOnPosition +"/"+ boxes
+                if (gameModel.lvlCount < maxLvls) {gameModel.firstLevel()} else {gameModel.nextLevel()}
+            }
+        }
+        Button {
+            id: but3
+            width: 100
+            height: 50
+            text: qsTr("Save")
+            focusPolicy: Qt.NoFocus
+            onClicked: if (gameModel.isComplete === false) {
+                console.log("Save")
+                           gameModel.saveGame()
+            }
+        }
+        Button {
+            id: but4
+            width: 100
+            height: 50
+            text: qsTr("Load")
+            focusPolicy: Qt.NoFocus
+            onClicked: if (gameModel.isComplete === false) {
+                console.log("Load")
+                           gameModel.loadGame()
             }
         }
             Button {
-                id: but3
+                id: but5
                 width: 100
                 height: 50
                 text: qsTr("Quit")
